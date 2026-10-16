@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { siteConfig } from '../config/siteConfig';
 import { db } from '../lib/firebase';
-import { collection, addDoc, getDocs, query, orderBy, limit } from 'firebase/firestore';
-import { Star, ShieldCheck, CheckCircle2, MessageSquare, Loader2, Plus } from 'lucide-react';
+import { collection, addDoc, getDocs, query, limit } from 'firebase/firestore';
+import { Star, ShieldCheck, Check, MessageSquare, Plus, X } from 'lucide-react';
 
 interface ReviewItem {
   id: string;
@@ -49,7 +49,6 @@ export default function ReviewsPage() {
               verified: data.verified ?? true
             };
           });
-          // Merge with siteConfig reviews
           setReviewsList([...loaded, ...siteConfig.testimonials]);
         }
       } catch (err) {
@@ -117,190 +116,199 @@ export default function ReviewsPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-12">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="max-w-2xl">
-          <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">
-            Verified Customer Satisfaction
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-black text-slate-950 mt-1 tracking-tight">
-            Homeowner Reviews & Ratings
-          </h1>
-          <p className="text-base text-slate-600 mt-3 leading-relaxed">
-            Read verified feedback from Central Florida homeowners who relied on Premium HVAC for
-            emergency diagnostics, preventative tune-ups, and energy-smart system replacements.
-          </p>
+    <div className="bg-[#fbfbf9] text-stone-900 selection:bg-[#c2784a]/20 selection:text-[#91542f] py-12 sm:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-16">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-stone-200 pb-8">
+          <div className="max-w-2xl space-y-3">
+            <div className="font-mono text-xs tracking-widest text-[#c2784a] uppercase flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#c2784a]" />
+              <span>01 —— VERIFIED FEEDBACK</span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-stone-950 leading-[1.1]">
+              Honest feedback from{' '}
+              <span className="text-[#c2784a] font-serif italic font-normal">
+                Florida homeowners.
+              </span>
+            </h1>
+            <p className="text-sm text-stone-600 font-light leading-relaxed">
+              Read verified testimonials from Central Florida residents who trusted Premium HVAC for
+              emergency diagnostics, seasonal preventative maintenance, and 15.2+ SEER2 heat pump
+              replacements.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setModalOpen(true)}
+            className="bg-[#c2784a] hover:bg-[#a8643b] text-white text-xs font-medium px-5 py-3 flex items-center gap-2 cursor-pointer shadow-xs transition-colors shrink-0"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Submit a review</span>
+          </button>
         </div>
 
-        <button
-          onClick={() => setModalOpen(true)}
-          className="bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-3.5 rounded-xl text-xs flex items-center gap-2 cursor-pointer shadow-md shrink-0"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Write a Verified Review</span>
-        </button>
-      </div>
-
-      {/* Review Submission Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl max-w-lg w-full border border-slate-200 shadow-2xl p-6 sm:p-8">
-            <h3 className="text-xl font-bold text-slate-900 mb-1">Submit Your Service Feedback</h3>
-            <p className="text-xs text-slate-500 mb-5">
-              Help your Florida neighbors choose an honest, reliable HVAC contractor.
-            </p>
-
-            {submitSuccess ? (
-              <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-xl text-center">
-                <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-                <h4 className="text-base font-bold text-emerald-900">Thank You for Your Feedback!</h4>
-                <p className="text-xs text-emerald-700 mt-1">Your review has been recorded.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmitReview} className="space-y-4">
-                {formError && (
-                  <p className="text-xs text-rose-600 bg-rose-50 p-2.5 rounded-lg border border-rose-200">
-                    {formError}
-                  </p>
-                )}
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Jason & Lisa M."
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900"
-                  />
+        {/* Reviews Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {reviewsList.map(rev => (
+            <div
+              key={rev.id}
+              className="bg-white border border-stone-200 p-6 sm:p-8 space-y-4 flex flex-col justify-between hover:border-stone-400 transition-colors"
+            >
+              <div className="space-y-3">
+                {/* Rating stars in terracotta */}
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-3.5 h-3.5 ${
+                        i < rev.rating
+                          ? 'text-[#c2784a] fill-[#c2784a]'
+                          : 'text-stone-300'
+                      }`}
+                    />
+                  ))}
+                  <span className="text-[11px] font-mono text-stone-400 ml-2">{rev.service}</span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <p className="text-xs text-stone-700 leading-relaxed font-light">
+                  "{rev.content}"
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-mono">
+                <div>
+                  <div className="font-bold text-stone-900">{rev.author}</div>
+                  <div className="text-[11px] text-stone-500">{rev.city}</div>
+                </div>
+
+                {rev.verified && (
+                  <span className="text-[10px] text-stone-400 border border-stone-200 px-2 py-0.5">
+                    VERIFIED
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Modal for Submitting Review */}
+        {modalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-xs">
+            <div className="bg-white max-w-lg w-full border border-stone-300 p-6 sm:p-8 space-y-5 shadow-2xl relative">
+              <button
+                onClick={() => setModalOpen(false)}
+                className="absolute top-4 right-4 text-stone-400 hover:text-stone-900 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="space-y-1">
+                <div className="text-[10px] font-mono text-[#c2784a] uppercase">SHARE EXPERIENCE</div>
+                <h3 className="text-xl font-bold text-stone-950">Write a Homeowner Review</h3>
+              </div>
+
+              {submitSuccess ? (
+                <div className="p-6 bg-stone-50 border border-stone-200 text-center space-y-2">
+                  <Check className="w-8 h-8 text-[#c2784a] mx-auto" />
+                  <p className="font-bold text-stone-900 text-sm">Thank you!</p>
+                  <p className="text-xs text-stone-600">Your review has been recorded to our system.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmitReview} className="space-y-4">
+                  {formError && (
+                    <p className="text-xs text-rose-600 bg-rose-50 p-2 border border-rose-200 font-mono">
+                      {formError}
+                    </p>
+                  )}
+
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                      City / Neighborhood
+                    <label className="block text-[11px] font-mono uppercase text-stone-700 mb-1">
+                      Your Full Name
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Winter Park, FL"
-                      value={city}
-                      onChange={e => setCity(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900"
+                      placeholder="e.g. Jason & Lisa M."
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      className="w-full bg-[#fbfbf9] border border-stone-300 px-3.5 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-[#c2784a]"
                     />
                   </div>
 
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-mono uppercase text-stone-700 mb-1">
+                        Neighborhood / City
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Winter Park, FL"
+                        value={city}
+                        onChange={e => setCity(e.target.value)}
+                        className="w-full bg-[#fbfbf9] border border-stone-300 px-3.5 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-[#c2784a]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-mono uppercase text-stone-700 mb-1">
+                        Rating (Stars)
+                      </label>
+                      <select
+                        value={rating}
+                        onChange={e => setRating(Number(e.target.value))}
+                        className="w-full bg-[#fbfbf9] border border-stone-300 px-3 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-[#c2784a]"
+                      >
+                        <option value={5}>5 Stars — Outstanding</option>
+                        <option value={4}>4 Stars — Very Good</option>
+                        <option value={3}>3 Stars — Average</option>
+                      </select>
+                    </div>
+                  </div>
+
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                      Rating
+                    <label className="block text-[11px] font-mono uppercase text-stone-700 mb-1">
+                      Service Performed
                     </label>
                     <select
-                      value={rating}
-                      onChange={e => setRating(Number(e.target.value))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 bg-white"
+                      value={service}
+                      onChange={e => setService(e.target.value)}
+                      className="w-full bg-[#fbfbf9] border border-stone-300 px-3 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-[#c2784a]"
                     >
-                      <option value={5}>5 Stars (Excellent)</option>
-                      <option value={4}>4 Stars (Good)</option>
-                      <option value={3}>3 Stars (Satisfactory)</option>
+                      <option value="AC Repair">Emergency AC Repair</option>
+                      <option value="AC Installation">15.2+ SEER2 AC Replacement</option>
+                      <option value="Preventative Maintenance">Seasonal Maintenance</option>
+                      <option value="Heat Pump Service">Heat Pump Installation / Service</option>
+                      <option value="Indoor Air Quality">Indoor Air Quality & Dehumidification</option>
                     </select>
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                    Service Received
-                  </label>
-                  <select
-                    value={service}
-                    onChange={e => setService(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 bg-white"
-                  >
-                    <option value="AC Repair">AC Repair & Diagnostics</option>
-                    <option value="AC Installation">15.2+ SEER2 AC Replacement</option>
-                    <option value="Preventative Maintenance">24-Point Preventative Maintenance</option>
-                    <option value="Heat Pump Service">Heat Pump & Heating Service</option>
-                    <option value="Indoor Air Quality">Indoor Air Quality / UV Lamp</option>
-                  </select>
-                </div>
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase text-stone-700 mb-1">
+                      Your Comments
+                    </label>
+                    <textarea
+                      required
+                      rows={4}
+                      placeholder="Describe the technician's arrival, diagnostic explanation, and completed work..."
+                      value={content}
+                      onChange={e => setContent(e.target.value)}
+                      className="w-full bg-[#fbfbf9] border border-stone-300 px-3.5 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-[#c2784a]"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                    Your Review
-                  </label>
-                  <textarea
-                    rows={4}
-                    required
-                    placeholder="Describe your service experience, punctuality, and workmanship..."
-                    value={content}
-                    onChange={e => setContent(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 resize-none"
-                  />
-                </div>
-
-                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
-                  <button
-                    type="button"
-                    onClick={() => setModalOpen(false)}
-                    className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800"
-                  >
-                    Cancel
-                  </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 px-5 rounded-xl text-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                    className="w-full bg-[#c2784a] hover:bg-[#a8643b] text-white text-xs font-medium py-3 cursor-pointer transition-colors shadow-xs"
                   >
-                    {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                    <span>Submit Review</span>
+                    {submitting ? 'Recording review...' : 'Submit Verified Review'}
                   </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Reviews Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {reviewsList.map(item => (
-          <div
-            key={item.id}
-            className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-1 text-amber-400">
-                  {[...Array(item.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
-                </div>
-                {item.verified && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                    <ShieldCheck className="w-3 h-3" />
-                    <span>Verified Homeowner</span>
-                  </span>
-                )}
-              </div>
-
-              <span className="text-[11px] font-bold text-sky-700 uppercase tracking-wide block mb-1">
-                {item.service}
-              </span>
-
-              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
-                "{item.content}"
-              </p>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
-              <span className="font-bold text-slate-900">{item.author}</span>
-              <span className="text-slate-500 font-medium">{item.city}</span>
+                </form>
+              )}
             </div>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

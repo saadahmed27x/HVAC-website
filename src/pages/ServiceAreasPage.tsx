@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { siteConfig } from '../config/siteConfig';
 import { validateZipCode } from '../utils/validation';
-import { MapPin, CheckCircle, Search, AlertCircle, Phone } from 'lucide-react';
+import { Search, Check, AlertCircle, ArrowUpRight, Phone, MapPin } from 'lucide-react';
 
 interface ServiceAreasPageProps {
   onNavigate: (path: string) => void;
@@ -20,31 +20,36 @@ export default function ServiceAreasPage({ onNavigate, onRequestQuote }: Service
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-16">
-      {/* Header */}
-      <div className="max-w-3xl">
-        <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">
-          Central Florida Service Territory
-        </span>
-        <h1 className="text-4xl sm:text-5xl font-black text-slate-950 mt-1 tracking-tight">
-          Areas We Genuinely Serve
-        </h1>
-        <p className="text-base text-slate-600 mt-4 leading-relaxed">
-          We focus our dispatch fleet across Orange, Seminole, and Osceola counties to ensure rapid
-          response times, fully stocked repair trucks, and deep familiarity with local municipal
-          permitting and Florida Building Code requirements.
-        </p>
-      </div>
+    <div className="bg-[#fbfbf9] text-stone-900 selection:bg-[#c2784a]/20 selection:text-[#91542f] py-12 sm:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-16">
+        {/* Header */}
+        <div className="max-w-3xl space-y-4">
+          <div className="font-mono text-xs tracking-widest text-[#c2784a] uppercase flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#c2784a]" />
+            <span>01 —— REGIONAL DISPATCH</span>
+          </div>
 
-      {/* Interactive ZIP Code Availability Checker */}
-      <div className="bg-slate-900 text-white p-8 rounded-3xl border border-slate-800 shadow-xl max-w-2xl">
-        <h3 className="text-xl font-bold mb-2">Check Your ZIP Code for Service Availability</h3>
-        <p className="text-xs text-slate-400 mb-5">
-          Enter your 5-digit Central Florida ZIP code to verify same-day diagnostic availability.
-        </p>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-stone-950 leading-[1.08]">
+            Areas we{' '}
+            <span className="text-[#c2784a] font-serif italic font-normal">genuinely serve.</span>
+          </h1>
 
-        <form onSubmit={handleZipCheck} className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
+          <p className="text-base sm:text-lg text-stone-600 font-light leading-relaxed">
+            We focus our dispatch fleet across Orange, Seminole, and Osceola counties to ensure rapid
+            arrival, fully equipped repair trucks, and deep familiarity with local Florida Building
+            Code permitting.
+          </p>
+        </div>
+
+        {/* Interactive ZIP Code Verification Box */}
+        <div className="bg-[#0b111a] text-white p-8 sm:p-10 border border-stone-800 shadow-xl max-w-2xl">
+          <div className="text-[11px] font-mono text-[#c2784a] uppercase">ZIP VERIFICATION</div>
+          <h2 className="text-xl sm:text-2xl font-bold mt-1 mb-2">Check Your Neighborhood</h2>
+          <p className="text-xs text-stone-400 mb-6 font-light">
+            Enter your 5-digit Central Florida ZIP code to verify same-day diagnostic service.
+          </p>
+
+          <form onSubmit={handleZipCheck} className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               maxLength={5}
@@ -54,91 +59,111 @@ export default function ServiceAreasPage({ onNavigate, onRequestQuote }: Service
                 setZipInput(e.target.value);
                 setZipResult(null);
               }}
-              className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 font-mono"
+              className="flex-1 bg-stone-900 border border-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:outline-none focus:border-[#c2784a] font-mono"
             />
-          </div>
-          <button
-            type="submit"
-            className="bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-3 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md"
-          >
-            <Search className="w-4 h-4" />
-            <span>Check ZIP Code</span>
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="bg-[#c2784a] hover:bg-[#a8643b] text-white font-medium px-6 py-3 text-xs flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-colors"
+            >
+              <Search className="w-3.5 h-3.5" />
+              <span>Verify ZIP</span>
+            </button>
+          </form>
 
-        {zipResult && zipResult.checked && (
-          <div
-            className={`mt-4 p-4 rounded-xl text-xs flex items-start gap-2.5 animate-in fade-in duration-150 ${
-              zipResult.inArea
-                ? 'bg-emerald-950/80 border border-emerald-600/50 text-emerald-200'
-                : 'bg-amber-950/80 border border-amber-600/50 text-amber-200'
-            }`}
-          >
-            {zipResult.inArea ? (
-              <>
-                <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-bold text-emerald-300">Great news! ZIP {zipInput} is in our primary service territory.</p>
-                  <p className="mt-0.5 text-emerald-200/90">
-                    We offer standard and emergency dispatch in your neighborhood.
-                  </p>
-                </div>
-              </>
-            ) : (
-              <>
-                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-bold text-amber-300">Notice for ZIP {zipInput}</p>
-                  <p className="mt-0.5">{zipResult.message}</p>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Verified Regions Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {siteConfig.serviceAreas.map(area => (
-          <div
-            key={area.name}
-            className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center gap-1.5 text-sky-600 text-xs font-bold mb-2">
-                <MapPin className="w-4 h-4" />
-                <span>{area.county}</span>
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">{area.name}</h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">{area.highlights}</p>
-
-              <div className="mt-4 pt-4 border-t border-slate-100">
-                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-                  Primary ZIP Codes Served:
-                </p>
-                <div className="flex flex-wrap gap-1.5 font-mono text-[11px]">
-                  {area.primaryZips.map(zip => (
-                    <span
-                      key={zip}
-                      className="px-2 py-0.5 bg-slate-100 rounded text-slate-700 border border-slate-200"
+          {zipResult && zipResult.checked && (
+            <div
+              className={`mt-4 p-4 text-xs flex items-start gap-3 border ${
+                zipResult.inArea
+                  ? 'bg-stone-900 border-[#c2784a] text-stone-100'
+                  : 'bg-stone-900 border-stone-700 text-stone-300'
+              }`}
+            >
+              {zipResult.inArea ? (
+                <>
+                  <Check className="w-4 h-4 text-[#c2784a] shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-bold font-mono text-white">ZIP {zipInput} VERIFIED IN SERVICE AREA</p>
+                    <p className="text-stone-300 mt-1">
+                      Same-day and next-day diagnostic arrival available in your neighborhood.
+                    </p>
+                    <button
+                      onClick={onRequestQuote}
+                      className="mt-2 text-xs font-mono text-[#c2784a] hover:underline flex items-center gap-1 cursor-pointer"
                     >
-                      {zip}
-                    </span>
-                  ))}
+                      <span>Proceed to schedule service →</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-bold font-mono text-amber-300">NOTICE FOR ZIP {zipInput}</p>
+                    <p className="mt-1 text-stone-300">{zipResult.message}</p>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* County Breakdown Grid */}
+        <section className="space-y-8">
+          <div className="border-b border-stone-200 pb-4">
+            <div className="font-mono text-xs text-[#c2784a] uppercase">COUNTY COVERAGE</div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-stone-950 mt-1">
+              Active Municipalities & Communities
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {siteConfig.serviceAreas.map(area => (
+              <div
+                key={area.county}
+                className="bg-white border border-stone-300 p-6 sm:p-8 space-y-4 hover:border-stone-400 transition-colors"
+              >
+                <div className="space-y-1">
+                  <div className="font-mono text-xs text-[#c2784a] uppercase">COUNTY SECTOR</div>
+                  <h3 className="text-xl font-bold text-stone-950">{area.county}</h3>
+                </div>
+
+                <div className="space-y-2 pt-2 border-t border-stone-100">
+                  <div className="text-[11px] font-mono text-stone-400 uppercase">
+                    PRIMARY CITIES & TOWNS:
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {area.cities.map(city => (
+                      <span
+                        key={city}
+                        className="text-xs bg-[#f4f3ef] border border-stone-200 px-2.5 py-1 text-stone-800 font-mono"
+                      >
+                        {city}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-2 text-xs text-stone-500 font-mono">
+                  Response window: <span className="text-stone-900 font-semibold">{area.responseWindow}</span>
                 </div>
               </div>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-slate-100">
-              <button
-                onClick={onRequestQuote}
-                className="w-full bg-slate-100 hover:bg-sky-50 text-slate-800 hover:text-sky-700 font-bold py-2 px-4 rounded-xl text-xs transition-colors cursor-pointer"
-              >
-                Schedule Service in {area.name}
-              </button>
-            </div>
+            ))}
           </div>
-        ))}
+        </section>
+
+        {/* Florida Building Code Compliance Note */}
+        <section className="bg-white border border-stone-300 p-8 sm:p-10 space-y-4">
+          <div className="font-mono text-xs text-[#c2784a] uppercase">MUNICIPAL PERMITTING</div>
+          <h3 className="text-xl font-bold text-stone-950">
+            Every Central Florida Replacement is Fully Permitted
+          </h3>
+          <p className="text-xs text-stone-600 leading-relaxed font-light max-w-3xl">
+            In Orange, Seminole, and Osceola counties, replacing an HVAC system legally requires a
+            mechanical permit and municipal inspection to certify duct tightness, electrical
+            disconnect ratings, and 160+ MPH hurricane condenser tie-downs. We handle all
+            permitting from application to final sign-off.
+          </p>
+        </section>
       </div>
     </div>
   );

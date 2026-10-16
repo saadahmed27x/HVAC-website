@@ -212,8 +212,8 @@ export default function LeadForm({
       <div className="space-y-4">
         {/* Full Name */}
         <div>
-          <label htmlFor="lead-name" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-            Your Full Name <span className="text-rose-500">*</span>
+          <label htmlFor="lead-name" className="block text-[11px] font-mono uppercase text-stone-700 tracking-wider mb-1">
+            Your Full Name <span className="text-[#c2784a]">*</span>
           </label>
           <input
             id="lead-name"
@@ -223,18 +223,18 @@ export default function LeadForm({
             placeholder="e.g. Sarah Jenkins"
             value={formData.name}
             onChange={handleChange}
-            className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none transition-colors ${
-              errors.name ? 'border-rose-400 bg-rose-50/30 focus:border-rose-500' : 'border-slate-300 focus:border-sky-600'
+            className={`w-full px-3.5 py-2.5 border text-xs text-stone-900 bg-[#fbfbf9] focus:outline-none transition-colors ${
+              errors.name ? 'border-rose-400 bg-rose-50/30' : 'border-stone-300 focus:border-[#c2784a]'
             }`}
           />
-          {errors.name && <p className="text-xs text-rose-600 mt-1">{errors.name}</p>}
+          {errors.name && <p className="text-[11px] font-mono text-rose-600 mt-1">{errors.name}</p>}
         </div>
 
         {/* Phone & Email Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="lead-phone" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Phone Number <span className="text-rose-500">*</span>
+            <label htmlFor="lead-phone" className="block text-[11px] font-mono uppercase text-stone-700 tracking-wider mb-1">
+              Phone Number <span className="text-[#c2784a]">*</span>
             </label>
             <input
               id="lead-phone"
@@ -244,16 +244,16 @@ export default function LeadForm({
               placeholder="(407) 555-0123"
               value={formData.phone}
               onChange={handleChange}
-              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none transition-colors ${
-                errors.phone ? 'border-rose-400 bg-rose-50/30 focus:border-rose-500' : 'border-slate-300 focus:border-sky-600'
+              className={`w-full px-3.5 py-2.5 border text-xs text-stone-900 bg-[#fbfbf9] focus:outline-none transition-colors ${
+                errors.phone ? 'border-rose-400 bg-rose-50/30' : 'border-stone-300 focus:border-[#c2784a]'
               }`}
             />
-            {errors.phone && <p className="text-xs text-rose-600 mt-1">{errors.phone}</p>}
+            {errors.phone && <p className="text-[11px] font-mono text-rose-600 mt-1">{errors.phone}</p>}
           </div>
 
           <div>
-            <label htmlFor="lead-zip" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Florida ZIP Code <span className="text-rose-500">*</span>
+            <label htmlFor="lead-zip" className="block text-[11px] font-mono uppercase text-stone-700 tracking-wider mb-1">
+              Florida ZIP Code <span className="text-[#c2784a]">*</span>
             </label>
             <input
               id="lead-zip"
@@ -264,18 +264,18 @@ export default function LeadForm({
               placeholder="e.g. 32801"
               value={formData.zipCode}
               onChange={handleChange}
-              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none transition-colors ${
-                errors.zipCode ? 'border-rose-400 bg-rose-50/30 focus:border-rose-500' : 'border-slate-300 focus:border-sky-600'
+              className={`w-full px-3.5 py-2.5 border text-xs text-stone-900 bg-[#fbfbf9] focus:outline-none transition-colors ${
+                errors.zipCode ? 'border-rose-400 bg-rose-50/30' : 'border-stone-300 focus:border-[#c2784a]'
               }`}
             />
-            {errors.zipCode && <p className="text-xs text-rose-600 mt-1">{errors.zipCode}</p>}
+            {errors.zipCode && <p className="text-[11px] font-mono text-rose-600 mt-1">{errors.zipCode}</p>}
           </div>
         </div>
 
         {/* Optional Email */}
         <div>
-          <label htmlFor="lead-email" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-            Email Address <span className="text-slate-400 font-normal">(Optional for estimate receipt)</span>
+          <label htmlFor="lead-email" className="block text-[11px] font-mono uppercase text-stone-700 tracking-wider mb-1">
+            Email Address <span className="text-stone-400 font-normal">(Optional for estimate receipt)</span>
           </label>
           <input
             id="lead-email"
@@ -284,24 +284,24 @@ export default function LeadForm({
             placeholder="sarah@example.com"
             value={formData.email}
             onChange={handleChange}
-            className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none transition-colors ${
-              errors.email ? 'border-rose-400 bg-rose-50/30 focus:border-rose-500' : 'border-slate-300 focus:border-sky-600'
+            className={`w-full px-3.5 py-2.5 border text-xs text-stone-900 bg-[#fbfbf9] focus:outline-none transition-colors ${
+              errors.email ? 'border-rose-400 bg-rose-50/30' : 'border-stone-300 focus:border-[#c2784a]'
             }`}
           />
-          {errors.email && <p className="text-xs text-rose-600 mt-1">{errors.email}</p>}
+          {errors.email && <p className="text-[11px] font-mono text-rose-600 mt-1">{errors.email}</p>}
         </div>
 
         {/* Service Type Selection */}
         <div>
-          <label htmlFor="lead-service" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-            Service Required <span className="text-rose-500">*</span>
+          <label htmlFor="lead-service" className="block text-[11px] font-mono uppercase text-stone-700 tracking-wider mb-1">
+            Service Required <span className="text-[#c2784a]">*</span>
           </label>
           <select
             id="lead-service"
             name="serviceType"
             value={formData.serviceType}
             onChange={handleChange}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-sky-600 bg-white"
+            className="w-full px-3.5 py-2.5 border border-stone-300 text-xs text-stone-900 focus:outline-none focus:border-[#c2784a] bg-[#fbfbf9]"
           >
             <option value="ac-repair">Air Conditioning Repair (Emergency / Diagnostic)</option>
             <option value="ac-installation">New AC / Heat Pump Installation (Free Estimate)</option>
@@ -311,13 +311,13 @@ export default function LeadForm({
             <option value="emergency-repair">Emergency No-Cooling Immediate Dispatch</option>
             <option value="other">Other HVAC Inquiry</option>
           </select>
-          {errors.serviceType && <p className="text-xs text-rose-600 mt-1">{errors.serviceType}</p>}
+          {errors.serviceType && <p className="text-[11px] font-mono text-rose-600 mt-1">{errors.serviceType}</p>}
         </div>
 
         {/* Urgency & Preferred Time */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="lead-urgency" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            <label htmlFor="lead-urgency" className="block text-[11px] font-mono uppercase text-stone-700 tracking-wider mb-1">
               Urgency Level
             </label>
             <select
@@ -325,7 +325,7 @@ export default function LeadForm({
               name="urgency"
               value={formData.urgency}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs text-slate-800 bg-white"
+              className="w-full px-3 py-2 border border-stone-300 text-xs text-stone-800 bg-[#fbfbf9] focus:outline-none focus:border-[#c2784a]"
             >
               <option value="emergency-same-day">Critical Emergency (Home over 85°F)</option>
               <option value="next-day">Next-Day Scheduled Window</option>
@@ -335,7 +335,7 @@ export default function LeadForm({
           </div>
 
           <div>
-            <label htmlFor="lead-time" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            <label htmlFor="lead-time" className="block text-[11px] font-mono uppercase text-stone-700 tracking-wider mb-1">
               Preferred Window
             </label>
             <select
@@ -343,7 +343,7 @@ export default function LeadForm({
               name="preferredTime"
               value={formData.preferredTime}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs text-slate-800 bg-white"
+              className="w-full px-3 py-2 border border-stone-300 text-xs text-stone-800 bg-[#fbfbf9] focus:outline-none focus:border-[#c2784a]"
             >
               <option value="morning">Morning (8:00 AM – 12:00 PM)</option>
               <option value="afternoon">Afternoon (12:00 PM – 4:00 PM)</option>
@@ -356,9 +356,9 @@ export default function LeadForm({
         {/* Message / Symptoms */}
         {!compact && (
           <div>
-            <label htmlFor="lead-message" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            <label htmlFor="lead-message" className="block text-[11px] font-mono uppercase text-stone-700 tracking-wider mb-1">
               Describe Problem or Equipment Details{' '}
-              <span className="text-slate-400 font-normal">(Optional)</span>
+              <span className="text-stone-400 font-normal">(Optional)</span>
             </label>
             <textarea
               id="lead-message"
@@ -367,7 +367,7 @@ export default function LeadForm({
               placeholder="e.g. Unit started blowing warm air this morning, fan is spinning outside but thermostat stays at 78..."
               value={formData.message}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-sky-600 resize-none"
+              className="w-full px-3.5 py-2.5 border border-stone-300 text-xs text-stone-900 bg-[#fbfbf9] focus:outline-none focus:border-[#c2784a] resize-none"
             />
           </div>
         )}
@@ -377,19 +377,19 @@ export default function LeadForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-bold py-3.5 px-6 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+          className="w-full bg-[#c2784a] hover:bg-[#a8643b] active:bg-[#91542f] text-white font-medium py-3.5 px-6 transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-60 text-xs"
         >
           {isSubmitting ? (
             <>
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
               <span>Verifying & Submitting Dispatch...</span>
             </>
           ) : (
             <span>Submit Service Request</span>
           )}
         </button>
-        <p className="text-[11px] text-slate-600 text-center mt-2.5">
-          🔒 Your privacy is protected. We never sell your contact info.
+        <p className="text-[11px] font-mono text-stone-400 text-center mt-2.5">
+          🔒 Your privacy is protected. Never sold or shared.
         </p>
       </div>
     </form>

@@ -1,22 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { siteConfig } from '../config/siteConfig';
 import ThreeHvacUnit from '../components/ThreeHvacUnit';
 import LeadForm from '../components/LeadForm';
 import HvacCalculator from '../components/HvacCalculator';
 import {
-  ShieldCheck,
   Phone,
-  Wrench,
-  CheckCircle,
-  Clock,
-  Award,
-  ChevronRight,
-  Wind,
-  Flame,
-  RotateCcw,
+  ArrowUpRight,
+  ArrowRight,
   Sparkles,
-  MapPin,
-  Star
+  ChevronRight,
+  ShieldCheck,
+  Check,
+  Gauge,
+  Thermometer,
+  Fan,
+  Wind
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -30,463 +28,665 @@ export default function HomePage({
   onRequestQuote,
   onOpenAiDiagnostic
 }: HomePageProps) {
-  const getServiceIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'Wrench':
-        return <Wrench className="w-6 h-6 text-sky-600" />;
-      case 'ShieldCheck':
-        return <ShieldCheck className="w-6 h-6 text-sky-600" />;
-      case 'RotateCcw':
-        return <RotateCcw className="w-6 h-6 text-sky-600" />;
-      case 'Flame':
-        return <Flame className="w-6 h-6 text-sky-600" />;
-      case 'Wind':
-        return <Wind className="w-6 h-6 text-sky-600" />;
-      default:
-        return <Wrench className="w-6 h-6 text-sky-600" />;
+  const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
+
+  const curatedServices = [
+    {
+      num: '01',
+      category: 'AC REPAIR',
+      title: 'Get the cool air back without the guesswork.',
+      desc: 'Rapid diagnostics for sudden no-cooling emergencies, frozen coils, loud capacitor hums, and clogged condensate lines across Central Florida.',
+      slug: 'ac-repair',
+      image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+      num: '02',
+      category: 'AC INSTALLATION',
+      title: 'A right-sized cooling system for the space.',
+      desc: 'Manual J load calculations ensuring your new 15.2+ SEER2 system dehumidifies efficiently rather than short-cycling in humid Florida conditions.',
+      slug: 'ac-installation',
+      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+      num: '03',
+      category: 'HEAT PUMPS',
+      title: 'Year-round comfort that operates quietly.',
+      desc: 'Dual-fuel and variable-capacity inverter heat pumps that deliver seamless summer cooling and gentle winter morning heating.',
+      slug: 'heating-and-heat-pumps',
+      image: 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+      num: '04',
+      category: 'MAINTENANCE',
+      title: 'Preventative care before the heat sets in.',
+      desc: 'Comprehensive 24-point seasonal tune-ups including chemical coil cleaning, electrical amp checks, and drain line treatment to prevent ceiling leaks.',
+      slug: 'preventative-maintenance',
+      image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+      num: '05',
+      category: 'INDOOR AIR QUALITY',
+      title: 'Sub-50% humidity and cleaner indoor air.',
+      desc: 'Whole-house dehumidification, HEPA filtration, and germicidal UV systems engineered to prevent biological growth in Florida duct systems.',
+      slug: 'indoor-air-quality',
+      image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80'
     }
-  };
+  ];
 
   return (
-    <div className="space-y-16 sm:space-y-24">
+    <div className="bg-[#fbfbf9] text-stone-900 selection:bg-[#c2784a]/20 selection:text-[#91542f]">
       {/* ==================================================== */}
-      {/* 1. HERO SECTION (Split-Layout with Interactive 3D)  */}
+      {/* HERO SECTION — Architectural Twilight Residence     */}
       {/* ==================================================== */}
-      <section className="relative pt-6 sm:pt-10 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Content (7 Cols) */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-sky-900 text-xs font-bold tracking-wide">
-                <span className="w-2 h-2 rounded-full bg-sky-600" />
-                <span>Central Florida Residential Cooling & Heating</span>
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.1]">
-                Reliable HVAC Services for Your Florida Home
-              </h1>
-
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl">
-                Get expert air conditioning repairs, precision 15.2+ SEER2 system replacements, and
-                seasonal maintenance with upfront flat pricing and certified Florida technicians.
-              </p>
-
-              {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <button
-                  onClick={onRequestQuote}
-                  className="bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-bold px-7 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all text-sm flex items-center gap-2 cursor-pointer"
-                >
-                  <span>Request Service</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-
-                {siteConfig.business.isPhoneVerified ? (
-                  <a
-                    href={`tel:${siteConfig.business.rawPhone}`}
-                    className="bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-bold px-6 py-3.5 rounded-xl transition-all text-sm flex items-center gap-2"
-                  >
-                    <Phone className="w-4 h-4 text-sky-600" />
-                    <span>Call {siteConfig.business.displayPhone}</span>
-                  </a>
-                ) : (
-                  <button
-                    onClick={onOpenAiDiagnostic}
-                    className="bg-slate-900 hover:bg-slate-800 text-sky-300 font-bold px-6 py-3.5 rounded-xl transition-all text-sm flex items-center gap-2 cursor-pointer shadow-sm"
-                  >
-                    <Sparkles className="w-4 h-4 text-sky-400" />
-                    <span>Smart Diagnostics</span>
-                  </button>
-                )}
-              </div>
-
-              {/* Trust Badges */}
-              <div className="pt-4 border-t border-slate-200/80 grid grid-cols-3 gap-3">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="text-xs font-semibold text-slate-700">Upfront Flat Rates</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="text-xs font-semibold text-slate-700">EPA 608 Certified</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="text-xs font-semibold text-slate-700">10-Yr Warranties</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Interactive 3D Model Studio (6 Cols) */}
-            <div className="lg:col-span-6">
-              <ThreeHvacUnit />
-              <p className="text-[11px] text-slate-600 text-center mt-2">
-                👆 Drag to rotate 3D heat pump • Toggle exploded view or airflow stream in controls
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ==================================================== */}
-      {/* 2. TRUTHFUL FLORIDA STANDARDS & CREDENTIALS         */}
-      {/* ==================================================== */}
-      <section className="bg-slate-900 text-white py-12 rounded-3xl mx-4 sm:mx-6 shadow-xl">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <span className="text-xs font-mono uppercase tracking-widest text-sky-400 font-bold">
-              Florida Building Code & Efficiency Standards
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black mt-1">
-              Engineered Specifically for Florida’s Climate
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 mt-2">
-              Florida homes demand more than generic HVAC advice. High humidity, tropical storms, and
-              3,000+ cooling hours require strict regional standards.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-slate-800/80 p-5 rounded-2xl border border-slate-700">
-              <Award className="w-8 h-8 text-sky-400 mb-3" />
-              <h3 className="text-base font-bold text-white">15.2+ SEER2 Required</h3>
-              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-                Mandatory federal minimum efficiency for Southeast Climate Zone 2. Cuts cooling
-                electric draw significantly over older 10–12 SEER units.
-              </p>
-            </div>
-
-            <div className="bg-slate-800/80 p-5 rounded-2xl border border-slate-700">
-              <ShieldCheck className="w-8 h-8 text-sky-400 mb-3" />
-              <h3 className="text-base font-bold text-white">175 MPH Hurricane Pads</h3>
-              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-                Every outdoor condenser is anchored to heavy composite foundations with Florida
-                Building Code approved stainless steel hold-down brackets.
-              </p>
-            </div>
-
-            <div className="bg-slate-800/80 p-5 rounded-2xl border border-slate-700">
-              <Wind className="w-8 h-8 text-sky-400 mb-3" />
-              <h3 className="text-base font-bold text-white">45–55% Target Humidity</h3>
-              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-                Multi-stage and variable-speed inverter blowers run longer at lower speeds, wringing
-                gallons of muggy moisture out of indoor air.
-              </p>
-            </div>
-
-            <div className="bg-slate-800/80 p-5 rounded-2xl border border-slate-700">
-              <Clock className="w-8 h-8 text-sky-400 mb-3" />
-              <h3 className="text-base font-bold text-white">Rapid Dispatch</h3>
-              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-                Prioritized arrival for homes with infants, elderly, or medical vulnerability when
-                temperatures exceed safe indoor levels.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ==================================================== */}
-      {/* 3. SERVICES OVERVIEW SECTION                        */}
-      {/* ==================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-          <div>
-            <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">
-              Comprehensive Residential Solutions
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-950 mt-1">
-              Professional HVAC Services
-            </h2>
-            <p className="text-sm text-slate-600 mt-1 max-w-xl">
-              From emergency diagnostic calls to precision new installations, our certified technicians
-              handle all residential equipment types.
-            </p>
-          </div>
-          <button
-            onClick={() => onNavigate('/services/')}
-            className="text-sm font-bold text-sky-600 hover:text-sky-700 flex items-center gap-1 cursor-pointer"
-          >
-            <span>View All Services</span>
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {siteConfig.services.map(service => (
-            <div
-              key={service.id}
-              className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-sky-300 transition-all flex flex-col justify-between group"
-            >
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-                  {getServiceIcon(service.iconName)}
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
-                  {service.name}
-                </h3>
-                <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                  {service.shortDescription}
-                </p>
-
-                <div className="mt-4 pt-4 border-t border-slate-100">
-                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-                    Common Problems Solved:
-                  </p>
-                  <ul className="space-y-1 text-xs text-slate-700">
-                    {service.commonProblems.slice(0, 2).map((prob, i) => (
-                      <li key={i} className="flex items-start gap-1.5">
-                        <span className="text-sky-600 font-bold">•</span>
-                        <span className="line-clamp-1">{prob}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                <button
-                  onClick={() => onNavigate(`/services/${service.slug}/`)}
-                  className="text-xs font-bold text-sky-600 hover:text-sky-800 cursor-pointer"
-                >
-                  Learn More & Pricing →
-                </button>
-                <button
-                  onClick={onRequestQuote}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-700 cursor-pointer"
-                >
-                  Book Service
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ==================================================== */}
-      {/* 4. INTERACTIVE SIZING & ENERGY SAVINGS CALCULATOR   */}
-      {/* ==================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <HvacCalculator
-          onRequestQuoteWithSpecs={specs => {
-            onRequestQuote();
+      <section className="relative min-h-[85vh] flex items-center bg-[#0b111a] text-white overflow-hidden">
+        {/* Cinematic Architectural Background Image with Multi-layer Vignette */}
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center opacity-40 mix-blend-luminosity scale-105 transform duration-1000"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=85')`
           }}
         />
+        {/* Gradient overlay for contrast and editorial tone */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#0b111a] via-[#0b111a]/85 to-transparent" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#0b111a] via-transparent to-[#0b111a]/60" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-20 sm:py-28 w-full">
+          <div className="max-w-3xl space-y-8">
+            {/* Monospace Section Tag */}
+            <div className="inline-flex items-center gap-2.5 font-mono text-xs tracking-widest text-[#c2784a] uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#c2784a]" />
+              <span>01 —— LOCAL HVAC SERVICE IN CENTRAL FLORIDA</span>
+            </div>
+
+            {/* Giant Architectural Headline with Editorial Serif Emphasis */}
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.05]">
+              Comfort,
+              <br />
+              considered
+              <br />
+              <span className="text-[#c2784a] font-serif italic font-normal">
+                for Florida living.
+              </span>
+            </h1>
+
+            {/* Lead Copy */}
+            <p className="text-base sm:text-lg text-stone-300 font-light leading-relaxed max-w-xl">
+              AC repair, installation, heat pumps, and maintenance for homes across Orlando, Winter
+              Park, and Central Florida. Clear diagnosis, thoughtful recommendations, and work done
+              properly.
+            </p>
+
+            {/* Actions */}
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <a
+                href={`tel:${siteConfig.business.rawPhone}`}
+                className="bg-[#c2784a] hover:bg-[#a8643b] text-white text-sm font-medium px-7 py-3.5 flex items-center gap-2 transition-all cursor-pointer shadow-md"
+              >
+                <span>Call now</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+
+              <button
+                onClick={onRequestQuote}
+                className="text-stone-200 hover:text-white text-sm font-medium border-b border-stone-400 hover:border-white pb-1 flex items-center gap-2 transition-colors cursor-pointer"
+              >
+                <span>Request an estimate</span>
+                <ArrowRight className="w-4 h-4 text-[#c2784a]" />
+              </button>
+
+              <button
+                onClick={onOpenAiDiagnostic}
+                className="bg-stone-900/80 hover:bg-stone-800 border border-stone-700 text-stone-300 hover:text-white text-xs font-mono px-4 py-3 flex items-center gap-2 transition-colors cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#c2784a]" />
+                <span>Smart AI Diagnostics</span>
+              </button>
+            </div>
+
+            {/* Subtle Metadata Strip */}
+            <div className="pt-8 border-t border-stone-800/80 flex flex-wrap items-center gap-6 text-xs font-mono text-stone-400">
+              <div className="flex items-center gap-2">
+                <span className="text-[#c2784a]">✓</span>
+                <span>FL Lic # {siteConfig.business.licenseNumber}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#c2784a]">✓</span>
+                <span>Upfront flat-rate pricing</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#c2784a]">✓</span>
+                <span>EPA 608 Certified</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ==================================================== */}
-      {/* 5. HOW IT WORKS (TRUTHFUL STEP-BY-STEP JOURNEY)     */}
+      {/* TECHNICAL RIBBON (Monogram Strip)                   */}
       {/* ==================================================== */}
-      <section className="bg-slate-100 py-16 rounded-3xl mx-4 sm:mx-6 border border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">
-              Transparent Service Journey
-            </span>
-            <h2 className="text-3xl font-black text-slate-900 mt-1">
-              How We Service Your HVAC System
+      <section className="border-y border-stone-200 bg-[#f4f3ef]">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-stone-200">
+          <div className="p-6 sm:p-8 flex items-baseline gap-4">
+            <span className="font-mono text-xl sm:text-2xl font-bold text-[#c2784a]">AC</span>
+            <div>
+              <div className="text-xs font-mono tracking-wider font-semibold text-stone-900 uppercase">
+                REPAIR & DIAGNOSTICS
+              </div>
+              <div className="text-[11px] text-stone-500 mt-0.5">Emergency cooling arrival</div>
+            </div>
+          </div>
+
+          <div className="p-6 sm:p-8 flex items-baseline gap-4">
+            <span className="font-mono text-xl sm:text-2xl font-bold text-[#c2784a]">HP</span>
+            <div>
+              <div className="text-xs font-mono tracking-wider font-semibold text-stone-900 uppercase">
+                15.2+ SEER2 HEAT PUMP
+              </div>
+              <div className="text-[11px] text-stone-500 mt-0.5">Florida code compliant</div>
+            </div>
+          </div>
+
+          <div className="p-6 sm:p-8 flex items-baseline gap-4">
+            <span className="font-mono text-xl sm:text-2xl font-bold text-[#c2784a]">IAQ</span>
+            <div>
+              <div className="text-xs font-mono tracking-wider font-semibold text-stone-900 uppercase">
+                AIR QUALITY & HUMIDITY
+              </div>
+              <div className="text-[11px] text-stone-500 mt-0.5">Sub-50% moisture target</div>
+            </div>
+          </div>
+
+          <div className="p-6 sm:p-8 flex items-baseline gap-4">
+            <span className="font-mono text-xl sm:text-2xl font-bold text-[#c2784a]">ZIP</span>
+            <div>
+              <div className="text-xs font-mono tracking-wider font-semibold text-stone-900 uppercase">
+                CENTRAL FLORIDA AREA
+              </div>
+              <div className="text-[11px] text-stone-500 mt-0.5">Orange • Seminole • Osceola</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================== */}
+      {/* SECTION 01 — THE BRIEF                              */}
+      {/* ==================================================== */}
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* Left Column (4 cols) */}
+          <div className="lg:col-span-4 space-y-4">
+            <div className="font-mono text-xs tracking-widest text-[#c2784a] uppercase">
+              01 —— THE BRIEF
+            </div>
+            <div className="text-xs text-stone-500 leading-relaxed max-w-xs">
+              Florida homes endure over 3,000 cooling hours every year. HVAC is not a convenience in
+              Central Florida—it is essential home preservation.
+            </div>
+          </div>
+
+          {/* Right Column (8 cols) */}
+          <div className="lg:col-span-8 space-y-8">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-stone-950 leading-[1.1]">
+              The best service call
+              <br />
+              <span className="text-stone-400 font-serif italic font-normal">
+                feels straightforward.
+              </span>
             </h2>
-            <p className="text-sm text-slate-600 mt-2">
-              No guesswork, no hidden trip fees, and no aggressive upselling. Here is exactly what to
-              expect when you request service.
+
+            <p className="text-lg sm:text-xl text-stone-700 leading-relaxed font-light max-w-2xl">
+              When the temperature is wrong, you do not need a high-pressure sales pitch. You need
+              an experienced technician who can identify the actual root issue, explain your options
+              plainly, and leave your home better than they found it.
             </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[
-              {
-                step: '01',
-                title: 'Submit Service Request',
-                desc: 'Fill out our simple form or call dispatch. We gather your system details, symptoms, and scheduling preference.'
-              },
-              {
-                step: '02',
-                title: 'Thorough Diagnostics',
-                desc: 'Our technician inspects electrical draw, subcooling, refrigerant pressures, and airflow with calibrated digital gauges.'
-              },
-              {
-                step: '03',
-                title: 'Clear Fixed-Price Quote',
-                desc: 'We present clear repair or replacement options with flat rates in writing before turning a single wrench.'
-              },
-              {
-                step: '04',
-                title: 'Precision Work & Testing',
-                desc: 'We complete the repair using OEM parts, test temperature drop across your coils, and provide warranty documentation.'
-              }
-            ].map(item => (
-              <div key={item.step} className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
-                <span className="text-2xl font-black font-mono text-sky-600 block mb-2">
-                  {item.step}
-                </span>
-                <h3 className="text-base font-bold text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+            <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-stone-600 border-t border-stone-200">
+              <div className="space-y-2">
+                <div className="font-mono text-xs font-semibold uppercase text-stone-900">
+                  DIAGNOSTIC FIRST
+                </div>
+                <p className="text-stone-600 leading-relaxed text-xs">
+                  We measure static duct pressure, superheat and subcooling refrigerant levels, and
+                  motor electrical amp draws before recommending a repair.
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================================================== */}
-      {/* 6. VERIFIED CENTRAL FLORIDA SERVICE AREAS           */}
-      {/* ==================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-          <div>
-            <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">
-              Service Territory
-            </span>
-            <h2 className="text-3xl font-black text-slate-950 mt-1">Central Florida Communities</h2>
-            <p className="text-sm text-slate-600 mt-1 max-w-xl">
-              We genuinely service homeowners across Orange, Seminole, and Osceola counties with fully
-              stocked dispatch vans.
-            </p>
-          </div>
-          <button
-            onClick={() => onNavigate('/service-areas/')}
-            className="text-sm font-bold text-sky-600 hover:text-sky-700 flex items-center gap-1 cursor-pointer"
-          >
-            <span>View All ZIP Codes & Coverage</span>
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {siteConfig.serviceAreas.map(area => (
-            <div
-              key={area.name}
-              className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs hover:border-sky-300 transition-colors"
-            >
-              <div className="flex items-center gap-1.5 text-sky-600 text-xs font-bold mb-1">
-                <MapPin className="w-3.5 h-3.5" />
-                <span>{area.county}</span>
+              <div className="space-y-2">
+                <div className="font-mono text-xs font-semibold uppercase text-stone-900">
+                  FLAT-RATE TRANSPARENCY
+                </div>
+                <p className="text-stone-600 leading-relaxed text-xs">
+                  Every replacement part and repair is priced from a standardized flat-rate book.
+                  You always approve the exact dollar amount before any work begins.
+                </p>
               </div>
-              <h3 className="text-sm font-bold text-slate-900">{area.name}</h3>
-              <p className="text-[11px] text-slate-500 mt-1 line-clamp-2">{area.highlights}</p>
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
       {/* ==================================================== */}
-      {/* 7. VERIFIED REVIEWS & HOMEOWNER FAQS                */}
+      {/* SECTION 02 — SERVICES FOR FLORIDA SPACES            */}
       {/* ==================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* Reviews (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
-            <div>
-              <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">
-                Homeowner Feedback
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-950 mt-1">
-                Verified Testimonials
+      <section className="py-20 sm:py-28 bg-[#f4f3ef] border-y border-stone-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
+          {/* Section Header */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+            <div className="lg:col-span-8 space-y-3">
+              <div className="font-mono text-xs tracking-widest text-[#c2784a] uppercase">
+                02 —— SERVICES FOR FLORIDA SPACES
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-stone-950">
+                Start with{' '}
+                <span className="text-[#c2784a] font-serif italic font-normal">what changed.</span>
               </h2>
-              <p className="text-xs text-slate-500 mt-1">
-                Representative feedback from Central Florida cooling and heating clients.
-              </p>
             </div>
+            <div className="lg:col-span-4 text-sm text-stone-600">
+              <p>
+                From sudden AC failure to planning a 15.2+ SEER2 heat pump replacement, every visit
+                begins with diagnosing what is happening in your home.
+              </p>
+              <button
+                onClick={() => onNavigate('/services/')}
+                className="mt-3 text-xs font-mono text-[#c2784a] hover:text-[#91542f] flex items-center gap-1.5 cursor-pointer font-medium"
+              >
+                <span>View all service details</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
 
-            <div className="space-y-4">
-              {siteConfig.testimonials.map(t => (
-                <div key={t.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-1 text-amber-400">
-                      {[...Array(t.rating)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                      ))}
+          {/* Interactive Service Layout (Editorial 3-Col Split) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-6">
+            {/* Left: Numbered Service List (5 cols) */}
+            <div className="lg:col-span-5 divide-y divide-stone-300 border-t border-b border-stone-300">
+              {curatedServices.map((service, idx) => (
+                <div
+                  key={service.slug}
+                  onMouseEnter={() => setSelectedServiceIndex(idx)}
+                  onClick={() => onNavigate(`/services/${service.slug}/`)}
+                  className={`py-5 px-3 transition-colors cursor-pointer group flex items-start justify-between gap-4 ${
+                    selectedServiceIndex === idx ? 'bg-white/80' : 'hover:bg-white/40'
+                  }`}
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-xs text-[#c2784a] font-bold">
+                        {service.num}
+                      </span>
+                      <span className="text-[11px] font-mono tracking-wider text-stone-500 uppercase">
+                        {service.category}
+                      </span>
                     </div>
-                    <span className="text-[11px] font-mono text-slate-400">{t.date}</span>
+                    <h3 className="text-base sm:text-lg font-bold text-stone-900 group-hover:text-[#c2784a] transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-xs text-stone-600 leading-relaxed line-clamp-2">
+                      {service.desc}
+                    </p>
                   </div>
-                  <p className="text-xs text-slate-700 italic leading-relaxed">"{t.content}"</p>
-                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-900">{t.author}</span>
-                    <span className="text-sky-600 font-medium">{t.city}</span>
-                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-stone-400 group-hover:text-[#c2784a] shrink-0 mt-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
               ))}
             </div>
 
-            <button
-              onClick={() => onNavigate('/reviews/')}
-              className="text-xs font-bold text-sky-600 hover:text-sky-800 cursor-pointer"
-            >
-              Read More Reviews or Submit Feedback →
-            </button>
-          </div>
+            {/* Center: Curated Architectural Image (4 cols) */}
+            <div className="lg:col-span-4 h-full">
+              <div className="relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] overflow-hidden bg-stone-900 shadow-md">
+                <img
+                  src={curatedServices[selectedServiceIndex].image}
+                  alt={curatedServices[selectedServiceIndex].title}
+                  className="w-full h-full object-cover transition-all duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#c2784a]">
+                    FLORIDA INSTALLATION & SERVICE
+                  </div>
+                  <div className="text-sm font-semibold mt-0.5">
+                    {curatedServices[selectedServiceIndex].category}
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          {/* FAQs (7 cols) */}
-          <div className="lg:col-span-7 space-y-6">
-            <div>
-              <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">
-                Frequently Asked Questions
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-950 mt-1">
-                Florida HVAC Answers
-              </h2>
-              <p className="text-xs text-slate-500 mt-1">
-                Honest explanations about pricing, efficiency, and repairs.
+            {/* Right: Field Note Callout (3 cols) */}
+            <div className="lg:col-span-3 space-y-6 bg-white p-6 sm:p-8 border border-stone-200">
+              <div className="font-mono text-[11px] tracking-widest text-[#c2784a] uppercase">
+                FIELD NOTE / 001
+              </div>
+
+              <h3 className="text-2xl font-bold tracking-tight text-stone-950 leading-snug">
+                Comfort is a system, not a single room.
+              </h3>
+
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Good HVAC service looks at the outdoor condenser, indoor air handler, return duct
+                sizing, and building envelope together. A unit that cools without dehumidifying leaves
+                Florida homes clammy.
               </p>
-            </div>
 
-            <div className="space-y-3">
-              {siteConfig.faqs.map((faq, idx) => (
-                <div key={idx} className="bg-white p-5 rounded-2xl border border-slate-200">
-                  <h3 className="text-sm font-bold text-slate-900 mb-1.5 flex items-start gap-2">
-                    <span className="text-sky-600 font-mono">Q.</span>
-                    <span>{faq.question}</span>
-                  </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed pl-5">{faq.answer}</p>
-                </div>
-              ))}
+              <div className="pt-2 border-t border-stone-100">
+                <button
+                  onClick={() => onNavigate(`/services/${curatedServices[selectedServiceIndex].slug}/`)}
+                  className="text-xs font-mono font-medium text-stone-900 hover:text-[#c2784a] flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>Explore service specs</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ==================================================== */}
-      {/* 8. FINAL CONVERSION CTA SECTION WITH LEAD FORM      */}
+      {/* SECTION 03 — THE DIFFERENCE (Dark Obsidian)          */}
       {/* ==================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 rounded-3xl p-8 sm:p-12 text-white shadow-2xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-6 space-y-4">
-              <span className="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold">
-                Ready for Honest Florida HVAC Service?
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
-                Request Your Service or Free Estimate Today
+      <section className="py-24 sm:py-32 bg-[#0b111a] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-5 space-y-4">
+              <div className="font-mono text-xs tracking-widest text-[#c2784a] uppercase">
+                03 —— THE DIFFERENCE
+              </div>
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.08]">
+                HVAC service
+                <br />
+                <span className="text-[#c2784a] font-serif italic font-normal">
+                  should feel simple.
+                </span>
               </h2>
-              <p className="text-sm text-slate-300 leading-relaxed">
-                Whether you need immediate emergency repair, a seasonal 24-point tune-up, or a
-                high-efficiency 15.2+ SEER2 heat pump quote, our dispatch team is ready to help.
+              <p className="text-sm text-stone-400 font-light leading-relaxed max-w-md pt-2">
+                Expressed in the small decisions that make a service visit feel clear, careful, and
+                worth trusting.
               </p>
+            </div>
 
-              <div className="pt-2 space-y-2 text-xs text-slate-300">
-                <p className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Licensed & insured Florida contractor (CAC-DEMO1234)</span>
-                </p>
-                <p className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Transparent flat-rate pricing before work starts</span>
-                </p>
-                <p className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>100% Satisfaction guarantee on all repairs and installations</span>
-                </p>
+            {/* 4 Architectural Cards with Hairline Dividers (7 cols) */}
+            <div className="lg:col-span-7 divide-y divide-stone-800 border-t border-b border-stone-800">
+              <div className="py-6 grid grid-cols-12 gap-4 items-baseline">
+                <div className="col-span-2 font-mono text-xs text-[#c2784a]">01</div>
+                <div className="col-span-10 space-y-1.5">
+                  <h3 className="text-lg font-bold text-white">Clear communication</h3>
+                  <p className="text-xs text-stone-400 leading-relaxed">
+                    No confusing technical jargon or surprise pricing. Every diagnosis is
+                    explained in plain language with written flat-rate estimates before work begins.
+                  </p>
+                </div>
               </div>
 
-              <div className="pt-4">
-                <p className="text-xs text-slate-400">Prefer to speak directly with dispatch?</p>
-                <p className="text-xl font-black text-amber-400 font-mono mt-0.5">
-                  {siteConfig.business.displayPhone}
+              <div className="py-6 grid grid-cols-12 gap-4 items-baseline">
+                <div className="col-span-2 font-mono text-xs text-[#c2784a]">02</div>
+                <div className="col-span-10 space-y-1.5">
+                  <h3 className="text-lg font-bold text-white">
+                    Diagnosis before recommendation
+                  </h3>
+                  <p className="text-xs text-stone-400 leading-relaxed">
+                    We look for the actual underlying failure first. We measure electrical draw,
+                    temperatures, and refrigerant pressures before offering repair or replacement
+                    options.
+                  </p>
+                </div>
+              </div>
+
+              <div className="py-6 grid grid-cols-12 gap-4 items-baseline">
+                <div className="col-span-2 font-mono text-xs text-[#c2784a]">03</div>
+                <div className="col-span-10 space-y-1.5">
+                  <h3 className="text-lg font-bold text-white">Respect for your home</h3>
+                  <p className="text-xs text-stone-400 leading-relaxed">
+                    Technicians wear clean uniforms and protective boot covers, use drop cloths on
+                    your flooring, and clean up thoroughly after testing and completing the job.
+                  </p>
+                </div>
+              </div>
+
+              <div className="py-6 grid grid-cols-12 gap-4 items-baseline">
+                <div className="col-span-2 font-mono text-xs text-[#c2784a]">04</div>
+                <div className="col-span-10 space-y-1.5">
+                  <h3 className="text-lg font-bold text-white">Long-term thinking</h3>
+                  <p className="text-xs text-stone-400 leading-relaxed">
+                    Repair when it makes financial sense. Replace only when equipment is
+                    compromised, unsafe, or inefficient. We prioritize your long-term energy savings.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================== */}
+      {/* SECTION 04 — INTERACTIVE 3D & SIZING STUDIO          */}
+      {/* ==================================================== */}
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
+        <div className="max-w-3xl space-y-3">
+          <div className="font-mono text-xs tracking-widest text-[#c2784a] uppercase">
+            04 —— ENGINEERING & 3D STUDIO
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-stone-950">
+            Precision engineering for{' '}
+            <span className="text-[#c2784a] font-serif italic font-normal">
+              Florida coastal heat.
+            </span>
+          </h2>
+          <p className="text-sm text-stone-600 leading-relaxed">
+            Interact with our 3D heat pump model below to inspect the inverter compressor,
+            anti-corrosion aluminum fins, and dual-mode airflow cooling simulation.
+          </p>
+        </div>
+
+        {/* 3D Studio Container */}
+        <div className="bg-[#0b111a] rounded-sm p-4 sm:p-6 border border-stone-800 shadow-xl">
+          <ThreeHvacUnit />
+          <div className="text-center pt-3 text-[11px] font-mono text-stone-400">
+            DRAG TO ROTATE 360° • EXPLODED VIEW • AIRFLOW PARTICLE SIMULATION
+          </div>
+        </div>
+
+        {/* Energy Savings & Tonnage Calculator Component */}
+        <div className="pt-6">
+          <HvacCalculator onScheduleConsultation={onRequestQuote} />
+        </div>
+      </section>
+
+      {/* ==================================================== */}
+      {/* SECTION 05 — A CALMER PROCESS                       */}
+      {/* ==================================================== */}
+      <section className="py-20 sm:py-28 bg-[#f4f3ef] border-t border-stone-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-5 space-y-4">
+              <div className="font-mono text-xs tracking-widest text-[#c2784a] uppercase">
+                05 —— A CALMER PROCESS
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-stone-950 leading-[1.1]">
+                Know what
+                <br />
+                <span className="text-[#c2784a] font-serif italic font-normal">
+                  happens next.
+                </span>
+              </h2>
+
+              <div className="p-6 bg-white border border-stone-200 space-y-2 mt-4">
+                <div className="font-mono text-[11px] tracking-widest text-[#c2784a] uppercase">
+                  FIELD NOTE / 002
+                </div>
+                <p className="text-xs text-stone-600 leading-relaxed">
+                  Good service starts by reducing the unknowns. The first call or online inquiry is
+                  a conversation, not a sales commitment.
                 </p>
               </div>
             </div>
 
-            <div className="lg:col-span-6">
-              <LeadForm />
+            {/* 4 Process Steps (7 cols) */}
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <div className="space-y-3 p-6 bg-white border border-stone-200">
+                <div className="font-mono text-xl font-bold text-[#c2784a]">01</div>
+                <h3 className="text-base font-bold text-stone-900">Tell us what changed.</h3>
+                <p className="text-xs text-stone-600 leading-relaxed">
+                  Call dispatch or submit our quick 2-minute request. Share what sounds, smells, or
+                  temperature issues you notice.
+                </p>
+              </div>
+
+              <div className="space-y-3 p-6 bg-white border border-stone-200">
+                <div className="font-mono text-xl font-bold text-[#c2784a]">02</div>
+                <h3 className="text-base font-bold text-stone-900">We diagnose the problem.</h3>
+                <p className="text-xs text-stone-600 leading-relaxed">
+                  An EPA-certified technician arrives on time, tests electrical and refrigeration
+                  components, and isolates the cause.
+                </p>
+              </div>
+
+              <div className="space-y-3 p-6 bg-white border border-stone-200">
+                <div className="font-mono text-xl font-bold text-[#c2784a]">03</div>
+                <h3 className="text-base font-bold text-stone-900">We explain your options.</h3>
+                <p className="text-xs text-stone-600 leading-relaxed">
+                  You get an upfront flat-rate price quote. We outline immediate fixes vs. long-term
+                  efficiency choices before starting work.
+                </p>
+              </div>
+
+              <div className="space-y-3 p-6 bg-white border border-stone-200">
+                <div className="font-mono text-xl font-bold text-[#c2784a]">04</div>
+                <h3 className="text-base font-bold text-stone-900">We get your comfort back.</h3>
+                <p className="text-xs text-stone-600 leading-relaxed">
+                  Work is completed with clean craftsmanship, tested for target supply air
+                  temperatures, and backed by a 100% guarantee.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================== */}
+      {/* SECTION 06 — NEXT STEP (Direct Dispatch & Form)      */}
+      {/* ==================================================== */}
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* Left Column (5 cols) */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="font-mono text-xs tracking-widest text-[#c2784a] uppercase">
+              06 —— NEXT STEP
+            </div>
+
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-stone-950 leading-[1.1]">
+              Let’s get your
+              <br />
+              <span className="text-[#c2784a] font-serif italic font-normal">comfort back.</span>
+            </h2>
+
+            <p className="text-sm text-stone-600 leading-relaxed">
+              Tell us what is happening, share your Central Florida ZIP code, and our dispatch team
+              will confirm an arrival window or immediate diagnostic technician.
+            </p>
+
+            <div className="space-y-4 pt-4 border-t border-stone-200">
+              <a
+                href={`tel:${siteConfig.business.rawPhone}`}
+                className="flex items-center gap-3 text-stone-900 hover:text-[#c2784a] transition-colors"
+              >
+                <div className="w-10 h-10 bg-stone-100 border border-stone-300 flex items-center justify-center text-[#c2784a]">
+                  <Phone className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-[10px] font-mono tracking-wider text-stone-500 uppercase">
+                    DIRECT DISPATCH PHONE
+                  </div>
+                  <div className="font-mono text-base font-bold">
+                    {siteConfig.business.displayPhone}
+                  </div>
+                </div>
+              </a>
+
+              <div className="text-xs text-stone-500 space-y-1 font-mono pt-2">
+                <p>Mon – Sat: 7:00 AM – 7:00 PM</p>
+                <p>24/7 Emergency Dispatch for critical Florida cooling outages</p>
+                <p>Office: {siteConfig.business.address.street}, Winter Park, FL</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Lead Form (7 cols) */}
+          <div className="lg:col-span-7 bg-white p-6 sm:p-10 border border-stone-300 shadow-sm">
+            <LeadForm onSuccess={() => onNavigate('/thank-you/')} />
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================== */}
+      {/* SECTION 07 — KEEP EXPLORING                          */}
+      {/* ==================================================== */}
+      <section className="py-20 sm:py-24 bg-[#f4f3ef] border-t border-stone-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
+          <div className="space-y-2">
+            <div className="font-mono text-xs tracking-widest text-[#c2784a] uppercase">
+              07 —— KEEP EXPLORING
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-stone-950">
+              Good work{' '}
+              <span className="text-[#c2784a] font-serif italic font-normal">leaves a trace.</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div
+              onClick={() => onNavigate('/service-areas/')}
+              className="p-8 bg-white border border-stone-300 hover:border-[#c2784a] transition-all cursor-pointer group flex flex-col justify-between h-48"
+            >
+              <div>
+                <div className="text-[11px] font-mono text-[#c2784a] uppercase">REGIONAL SERVICE</div>
+                <h3 className="text-lg font-bold text-stone-900 mt-2 group-hover:text-[#c2784a]">
+                  See the service areas
+                </h3>
+                <p className="text-xs text-stone-500 mt-1">
+                  Orange, Seminole & Osceola counties coverage map.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-stone-900 group-hover:text-[#c2784a]">
+                <span>Verify your ZIP code</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            <div
+              onClick={() => onNavigate('/reviews/')}
+              className="p-8 bg-white border border-stone-300 hover:border-[#c2784a] transition-all cursor-pointer group flex flex-col justify-between h-48"
+            >
+              <div>
+                <div className="text-[11px] font-mono text-[#c2784a] uppercase">TESTIMONIALS</div>
+                <h3 className="text-lg font-bold text-stone-900 mt-2 group-hover:text-[#c2784a]">
+                  Read verified reviews
+                </h3>
+                <p className="text-xs text-stone-500 mt-1">
+                  Honest feedback from Florida homeowners.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-stone-900 group-hover:text-[#c2784a]">
+                <span>View ratings</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            <div
+              onClick={onRequestQuote}
+              className="p-8 bg-[#0b111a] text-white border border-stone-800 hover:border-[#c2784a] transition-all cursor-pointer group flex flex-col justify-between h-48"
+            >
+              <div>
+                <div className="text-[11px] font-mono text-[#c2784a] uppercase">ESTIMATE</div>
+                <h3 className="text-lg font-bold text-white mt-2 group-hover:text-[#c2784a]">
+                  Request an estimate
+                </h3>
+                <p className="text-xs text-stone-400 mt-1">
+                  Transparent options and scheduled technician arrival.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-[#c2784a] group-hover:text-white">
+                <span>Book now</span>
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
             </div>
           </div>
         </div>

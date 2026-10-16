@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { siteConfig } from '../config/siteConfig';
-import { Phone, Menu, X, Shield, Wrench, User as UserIcon, LogOut } from 'lucide-react';
+import { Phone, Menu, X, ArrowUpRight, Wrench, User as UserIcon, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface NavbarProps {
@@ -22,11 +22,11 @@ export default function Navbar({
   const { user, login, logout } = useAuth();
 
   const navLinks = [
-    { label: 'Services', path: '/services/' },
-    { label: 'About', path: '/about/' },
-    { label: 'Service Areas', path: '/service-areas/' },
-    { label: 'Reviews', path: '/reviews/' },
-    { label: 'Contact', path: '/contact/' }
+    { label: 'Services', path: '/services/', number: '01' },
+    { label: 'About', path: '/about/', number: '02' },
+    { label: 'Reviews', path: '/reviews/', number: '03' },
+    { label: 'Service areas', path: '/service-areas/', number: '04' },
+    { label: 'Contact', path: '/contact/', number: '05' }
   ];
 
   const handleNavClick = (path: string) => {
@@ -36,148 +36,137 @@ export default function Navbar({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 border-b border-slate-200/80 shadow-xs backdrop-blur-md">
-      {/* Top Notification Bar for Florida Demo Notice & Emergency Line */}
-      <div className="bg-slate-900 text-slate-300 text-xs py-1.5 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-              Demo Mode
+    <header className="sticky top-0 z-40 bg-[#fbfbf9]/95 backdrop-blur-md border-b border-stone-200/80 transition-all">
+      {/* Top Architectural Utility Bar */}
+      <div className="bg-[#0b111a] text-slate-300 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase border-b border-white/5 py-2 px-4 sm:px-8">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3 sm:gap-6">
+            <span className="text-stone-300 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#c2784a]" />
+              SERVING FLORIDA
             </span>
-            <span className="truncate max-w-[280px] sm:max-w-none text-slate-300">
-              Central Florida Residential HVAC Demo • FL Lic # CAC-DEMO1234
+            <span className="text-stone-500 hidden md:inline">•</span>
+            <span className="text-stone-400 hidden md:inline">
+              LICENSED & INSURED — {siteConfig.business.licenseNumber}
             </span>
           </div>
-          <div className="flex items-center gap-4">
+
+          <div className="flex items-center gap-4 sm:gap-6">
             <button
               onClick={onOpenAiDiagnostic}
-              className="hover:text-sky-300 transition-colors flex items-center gap-1 font-medium cursor-pointer"
+              className="hover:text-[#e49b6d] text-stone-300 transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <Wrench className="w-3 h-3 text-sky-400" />
-              <span>Smart Diagnostics</span>
+              <Wrench className="w-3 h-3 text-[#c2784a]" />
+              <span className="normal-case font-sans font-medium text-xs">AI Diagnostics</span>
             </button>
-            <span className="text-slate-600 hidden sm:inline">|</span>
-            {siteConfig.business.isPhoneVerified ? (
-              <a
-                href={`tel:${siteConfig.business.rawPhone}`}
-                className="text-amber-400 font-semibold hover:text-amber-300 transition-colors flex items-center gap-1"
-              >
-                <Phone className="w-3 h-3" />
-                <span>{siteConfig.business.displayPhone}</span>
-              </a>
-            ) : (
-              <span className="text-slate-400 hidden sm:inline">
-                Emergency Dispatch: <strong className="text-slate-200">{siteConfig.business.displayPhone}</strong>
-              </span>
-            )}
+            <span className="text-stone-600 hidden sm:inline">•</span>
+            <a
+              href={`tel:${siteConfig.business.rawPhone}`}
+              className="text-stone-200 hover:text-[#e49b6d] transition-colors flex items-center gap-1.5"
+            >
+              <Phone className="w-3 h-3 text-[#c2784a]" />
+              <span>CALL {siteConfig.business.displayPhone}</span>
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      {/* Main Agency Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo & Brand */}
+          {/* Brand Monogram & Name */}
           <div
             onClick={() => handleNavClick('/')}
-            className="flex items-center gap-3 cursor-pointer select-none group"
+            className="flex items-center gap-3.5 cursor-pointer select-none group"
           >
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-700 via-sky-600 to-slate-900 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-              <Shield className="w-6 h-6 text-white stroke-[2.2]" />
+            {/* Minimal architectural logo box */}
+            <div className="w-10 h-10 bg-[#0b111a] border border-stone-800 flex flex-col items-center justify-center relative overflow-hidden group-hover:border-[#c2784a] transition-colors">
+              <div className="w-4 h-0.5 bg-[#c2784a] mb-1 group-hover:w-5 transition-all" />
+              <div className="w-5 h-0.5 bg-stone-300" />
             </div>
+
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xl font-extrabold tracking-tight text-slate-900 font-sans">
-                  PREMIUM
-                </span>
-                <span className="text-xl font-extrabold tracking-tight text-sky-600">
-                  HVAC
+                <span className="text-base sm:text-lg font-bold tracking-tight text-slate-950 font-sans">
+                  {siteConfig.business.name}
                 </span>
               </div>
-              <p className="text-[11px] font-medium text-slate-500 tracking-wide uppercase">
-                Florida Home Cooling & Heating
+              <p className="text-[10px] font-mono tracking-widest text-stone-500 uppercase leading-none">
+                HVAC / SYSTEMS
               </p>
             </div>
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-7">
+          <nav className="hidden lg:flex items-center gap-8" aria-label="Main navigation">
             {navLinks.map(link => {
               const isActive =
                 currentPath === link.path ||
-                (link.path === '/services/' && currentPath.startsWith('/services/'));
+                (link.path !== '/' && currentPath.startsWith(link.path));
               return (
                 <button
                   key={link.path}
                   onClick={() => handleNavClick(link.path)}
-                  className={`text-sm font-semibold tracking-wide transition-colors cursor-pointer py-1 ${
+                  className={`text-[13px] font-medium tracking-wide transition-colors cursor-pointer relative py-2 ${
                     isActive
-                      ? 'text-sky-700 border-b-2 border-sky-600'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'text-slate-950 font-semibold'
+                      : 'text-stone-600 hover:text-slate-950'
                   }`}
                 >
-                  {link.label}
+                  <span>{link.label}</span>
+                  {isActive && (
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#c2784a]" />
+                  )}
                 </button>
               );
             })}
           </nav>
 
-          {/* Action CTAs & Auth */}
-          <div className="hidden sm:flex items-center gap-3">
-            {/* User Profile / Google Sign-In */}
-            {user ? (
-              <div
-                onClick={onOpenPortal}
-                className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200/80 py-1.5 px-3 rounded-lg border border-slate-200 cursor-pointer transition-colors"
-                title="Open Homeowner Portal"
-              >
-                <div className="w-6 h-6 rounded-full bg-sky-600 text-white text-xs flex items-center justify-center font-bold">
-                  {user.displayName ? user.displayName[0] : 'U'}
-                </div>
-                <span className="text-xs font-semibold text-slate-800 max-w-[100px] truncate">
-                  {user.displayName || user.email}
-                </span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    logout();
-                  }}
-                  title="Sign Out"
-                  className="text-slate-400 hover:text-rose-600 p-0.5 ml-1 transition-colors cursor-pointer"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={onOpenPortal}
-                className="text-xs font-semibold text-slate-700 hover:text-sky-700 px-3 py-2 rounded-lg border border-slate-300 hover:border-sky-400 transition-all flex items-center gap-1.5 cursor-pointer"
-              >
-                <UserIcon className="w-3.5 h-3.5" />
-                <span>Homeowner Portal</span>
-              </button>
-            )}
+          {/* Desktop Actions */}
+          <div className="hidden lg:flex items-center gap-4">
+            {/* Direct Phone */}
+            <a
+              href={`tel:${siteConfig.business.rawPhone}`}
+              className="text-stone-800 hover:text-[#c2784a] text-xs font-mono font-medium flex items-center gap-1.5 transition-colors py-2 px-2"
+              title="Direct HVAC Dispatch Phone"
+            >
+              <Phone className="w-3.5 h-3.5 text-stone-600" />
+              <span>{siteConfig.business.displayPhone}</span>
+            </a>
 
-            {/* Primary Request Service Button */}
+            {/* Homeowner Portal Button */}
+            <button
+              onClick={onOpenPortal}
+              className="text-xs font-medium text-stone-700 hover:text-stone-950 hover:bg-stone-100 border border-stone-300 px-3 py-2.5 transition-colors flex items-center gap-1.5 cursor-pointer"
+              title="Customer Account & Service History"
+            >
+              <UserIcon className="w-3.5 h-3.5 text-stone-500" />
+              <span>{user ? user.displayName?.split(' ')[0] || 'Account' : 'Portal'}</span>
+            </button>
+
+            {/* Primary Terracotta CTA Button */}
             <button
               onClick={onRequestQuote}
-              className="bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center gap-2 cursor-pointer"
+              className="bg-[#c2784a] hover:bg-[#a8643b] active:bg-[#91542f] text-white text-xs font-medium tracking-wide px-5 py-2.5 transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
-              <span>Request Service</span>
+              <span>Request service</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          {/* Mobile Menu Hamburger */}
-          <div className="md:hidden flex items-center gap-2">
+          {/* Mobile Menu & Quick CTA Trigger */}
+          <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={onRequestQuote}
-              className="bg-sky-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg cursor-pointer"
+              className="bg-[#c2784a] text-white text-xs font-medium px-3.5 py-2 rounded-xs flex items-center gap-1 cursor-pointer"
             >
-              Request
+              <span>Service</span>
+              <ArrowUpRight className="w-3 h-3" />
             </button>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-700 hover:text-slate-900 rounded-lg hover:bg-slate-100 cursor-pointer"
+              className="p-2 text-stone-800 hover:text-stone-950 cursor-pointer"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -188,75 +177,73 @@ export default function Navbar({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl animate-in slide-in-from-top-2 duration-150">
-          <nav className="flex flex-col space-y-2">
-            <button
-              onClick={() => handleNavClick('/')}
-              className="text-left py-2.5 px-3 rounded-lg text-sm font-bold text-slate-800 hover:bg-slate-100"
-            >
-              Home
-            </button>
+        <div className="lg:hidden bg-[#0b111a] text-stone-200 border-t border-stone-800 px-6 py-8 space-y-6 animate-in slide-in-from-top duration-200">
+          <div className="text-[10px] font-mono tracking-widest text-[#c2784a] uppercase">
+            NAVIGATION
+          </div>
+          <nav className="space-y-4">
             {navLinks.map(link => (
               <button
                 key={link.path}
                 onClick={() => handleNavClick(link.path)}
-                className="text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-100 hover:text-sky-700"
+                className="w-full text-left flex items-center justify-between py-2 text-base font-medium text-stone-200 hover:text-white border-b border-stone-800/80 cursor-pointer"
               >
-                {link.label}
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs text-[#c2784a]">{link.number}</span>
+                  <span>{link.label}</span>
+                </div>
+                <ArrowUpRight className="w-4 h-4 text-stone-500" />
               </button>
             ))}
-            <div className="pt-3 border-t border-slate-200 flex flex-col gap-2.5">
+          </nav>
+
+          <div className="pt-4 border-t border-stone-800 space-y-3">
+            <div className="text-[10px] font-mono tracking-widest text-stone-400 uppercase">
+              DIRECT DISPATCH
+            </div>
+            <a
+              href={`tel:${siteConfig.business.rawPhone}`}
+              className="block bg-stone-900 border border-stone-800 p-3 text-sm font-mono text-stone-100 flex items-center justify-between"
+            >
+              <span>{siteConfig.business.displayPhone}</span>
+              <Phone className="w-4 h-4 text-[#c2784a]" />
+            </a>
+
+            <div className="grid grid-cols-2 gap-2 pt-2">
               <button
                 onClick={() => {
-                  onOpenAiDiagnostic();
                   setMobileMenuOpen(false);
+                  onOpenAiDiagnostic();
                 }}
-                className="w-full text-center py-2.5 px-4 rounded-xl text-xs font-bold bg-slate-900 text-sky-300 flex items-center justify-center gap-2"
+                className="bg-stone-900 hover:bg-stone-800 border border-stone-800 text-stone-200 text-xs py-3 px-3 text-center cursor-pointer flex items-center justify-center gap-1.5"
               >
-                <Wrench className="w-3.5 h-3.5" />
-                <span>Smart AI HVAC Diagnostics</span>
+                <Wrench className="w-3.5 h-3.5 text-[#c2784a]" />
+                <span>AI Diagnostics</span>
               </button>
 
-              {user ? (
-                <div
-                  onClick={() => {
-                    onOpenPortal();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer transition-colors"
-                >
-                  <div className="flex items-center gap-2 truncate">
-                    <div className="w-6 h-6 rounded-full bg-sky-600 text-white text-xs flex items-center justify-center font-bold shrink-0">
-                      {user.displayName ? user.displayName[0] : 'U'}
-                    </div>
-                    <span className="text-xs font-semibold text-slate-800 truncate">
-                      {user.displayName || user.email}
-                    </span>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      logout();
-                    }}
-                    className="text-xs font-bold text-rose-600 hover:text-rose-700 ml-2"
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => {
-                    onOpenPortal();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold border border-slate-300 text-slate-700 hover:bg-slate-50 flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <UserIcon className="w-3.5 h-3.5" />
-                  <span>Homeowner Portal</span>
-                </button>
-              )}
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenPortal();
+                }}
+                className="bg-stone-900 hover:bg-stone-800 border border-stone-800 text-stone-200 text-xs py-3 px-3 text-center cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <UserIcon className="w-3.5 h-3.5 text-stone-400" />
+                <span>{user ? 'Account' : 'Portal'}</span>
+              </button>
             </div>
-          </nav>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onRequestQuote();
+              }}
+              className="w-full bg-[#c2784a] hover:bg-[#a8643b] text-white font-medium py-3 text-sm flex items-center justify-center gap-2 cursor-pointer mt-2"
+            >
+              <span>Request service visit</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
     </header>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { siteConfig } from '../config/siteConfig';
-import { Shield, Phone, Mail, MapPin, Clock, CheckCircle2 } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, ArrowUpRight } from 'lucide-react';
 
 interface FooterProps {
   onNavigate: (path: string) => void;
@@ -13,91 +13,114 @@ export default function Footer({ onNavigate }: FooterProps) {
   };
 
   return (
-    <footer className="bg-slate-950 text-slate-300 pt-16 pb-12 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
-          {/* Brand & Overview */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-sky-600 flex items-center justify-center shadow-md">
-                <Shield className="w-5 h-5 text-white" />
+    <footer className="bg-[#0b111a] text-stone-300 border-t border-stone-800/80 pt-16 sm:pt-20 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 border-b border-stone-800/80">
+          {/* Brand Col (4 Cols) */}
+          <div className="lg:col-span-4 space-y-6">
+            <div
+              onClick={() => handleNav('/')}
+              className="flex items-center gap-3.5 cursor-pointer select-none group inline-flex"
+            >
+              <div className="w-10 h-10 bg-stone-900 border border-stone-700 flex flex-col items-center justify-center relative overflow-hidden group-hover:border-[#c2784a] transition-colors">
+                <div className="w-4 h-0.5 bg-[#c2784a] mb-1 group-hover:w-5 transition-all" />
+                <div className="w-5 h-0.5 bg-stone-300" />
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-xl font-black tracking-tight text-white">PREMIUM</span>
-                <span className="text-xl font-black tracking-tight text-sky-400">HVAC</span>
+              <div>
+                <span className="text-lg font-bold tracking-tight text-white block">
+                  {siteConfig.business.name}
+                </span>
+                <p className="text-[10px] font-mono tracking-widest text-stone-400 uppercase leading-none">
+                  HVAC / SYSTEMS
+                </p>
               </div>
             </div>
-            <p className="text-sm text-slate-400 leading-relaxed max-w-md">
-              Demonstration website designed for residential air conditioning and heating
-              contractors serving Central Florida. Built for maximum homeowner trust, rapid mobile
-              lead conversion, and compliance with Florida Building Code standards.
+
+            <p className="text-sm text-stone-400 leading-relaxed max-w-sm">
+              Precision HVAC service for Orlando, Winter Park, and Central Florida. Thoughtful
+              evaluations, upfront flat-rate pricing, and residential comfort handled properly.
             </p>
-            <div className="pt-2 text-xs text-slate-400 space-y-1">
-              <p className="font-semibold text-slate-300">{siteConfig.business.license.licenseNumber}</p>
-              <p>{siteConfig.business.license.insuredAmount}</p>
-              <p className="text-amber-400/90 font-medium">{siteConfig.business.floridaStandards.seer2Minimum}</p>
+
+            <div className="pt-2 space-y-1.5 text-xs text-stone-400 font-mono">
+              <p>FL Lic # {siteConfig.business.licenseNumber}</p>
+              <p>$2,000,000 Commercial General Liability</p>
+              <p>15.2 SEER2 Southeast Compliance Standard</p>
+            </div>
+
+            <div className="pt-2">
+              <button
+                onClick={() => handleNav('/contact/')}
+                className="inline-flex items-center gap-1.5 text-xs font-mono tracking-wider text-[#c2784a] hover:text-[#e49b6d] border-b border-[#c2784a]/50 pb-0.5 transition-colors cursor-pointer"
+              >
+                <span>REQUEST PRIORITY SERVICE</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
-              HVAC Services
-            </h4>
+          {/* Col 2: Services (3 Cols) */}
+          <div className="lg:col-span-3 space-y-4">
+            <div className="text-[11px] font-mono tracking-widest text-[#c2784a] uppercase">
+              SERVICES
+            </div>
             <ul className="space-y-2.5 text-sm">
-              {siteConfig.services.map(s => (
-                <li key={s.id}>
+              {siteConfig.services.map(service => (
+                <li key={service.slug}>
                   <button
-                    onClick={() => handleNav(`/services/${s.slug}/`)}
-                    className="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer text-left"
+                    onClick={() => handleNav(`/services/${service.slug}/`)}
+                    className="text-stone-400 hover:text-white transition-colors cursor-pointer text-left"
                   >
-                    {s.name}
+                    {service.shortTitle}
                   </button>
                 </li>
               ))}
-              <li>
+              <li className="pt-2">
                 <button
                   onClick={() => handleNav('/services/')}
-                  className="text-sky-400 hover:text-sky-300 font-semibold cursor-pointer text-left"
+                  className="text-xs font-mono text-stone-300 hover:text-[#c2784a] transition-colors cursor-pointer flex items-center gap-1"
                 >
-                  All Services Overview →
+                  <span>All Services Overview</span>
+                  <span>→</span>
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Company & Areas */}
-          <div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Company</h4>
-            <ul className="space-y-2.5 text-sm">
+          {/* Col 3: Explore & Service Areas (2 Cols) */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="text-[11px] font-mono tracking-widest text-[#c2784a] uppercase">
+              EXPLORE
+            </div>
+            <ul className="space-y-2.5 text-sm text-stone-400">
               <li>
                 <button
                   onClick={() => handleNav('/about/')}
-                  className="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  About Our Team
+                  About Team
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => handleNav('/service-areas/')}
-                  className="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Service Areas (Orlando & Beyond)
+                  Service Areas
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => handleNav('/reviews/')}
-                  className="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Homeowner Reviews
+                  Client Reviews
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => handleNav('/contact/')}
-                  className="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
                   Contact & Dispatch
                 </button>
@@ -105,7 +128,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               <li>
                 <button
                   onClick={() => handleNav('/privacy/')}
-                  className="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
                   Privacy Policy
                 </button>
@@ -113,57 +136,68 @@ export default function Footer({ onNavigate }: FooterProps) {
             </ul>
           </div>
 
-          {/* Contact Details */}
-          <div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
-              Direct Contact
-            </h4>
-            <div className="space-y-3 text-sm text-slate-400">
-              <div className="flex items-start gap-2.5">
-                <Phone className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs text-slate-500">24/7 Phone Dispatch</p>
-                  <p className="font-semibold text-slate-200">{siteConfig.business.displayPhone}</p>
+          {/* Col 4: Contact & Dispatch (3 Cols) */}
+          <div className="lg:col-span-3 space-y-4">
+            <div className="text-[11px] font-mono tracking-widest text-[#c2784a] uppercase">
+              DIRECT DISPATCH
+            </div>
+            <div className="space-y-3 text-sm">
+              <a
+                href={`tel:${siteConfig.business.rawPhone}`}
+                className="block text-stone-300 hover:text-white transition-colors group"
+              >
+                <div className="text-[11px] font-mono text-stone-400">PHONE DISPATCH</div>
+                <div className="font-mono text-base text-stone-100 group-hover:text-[#c2784a]">
+                  {siteConfig.business.displayPhone}
                 </div>
+              </a>
+
+              <div>
+                <div className="text-[11px] font-mono text-stone-400">EMAIL</div>
+                <a
+                  href={`mailto:${siteConfig.business.email}`}
+                  className="text-stone-300 hover:text-white font-mono text-xs"
+                >
+                  {siteConfig.business.email}
+                </a>
               </div>
-              <div className="flex items-start gap-2.5">
-                <Mail className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs text-slate-500">Service Enquiries</p>
-                  <p className="text-slate-200">{siteConfig.business.email}</p>
-                </div>
+
+              <div>
+                <div className="text-[11px] font-mono text-stone-400">OFFICE & DISPATCH</div>
+                <p className="text-xs text-stone-400 leading-relaxed">
+                  {siteConfig.business.address.street}, {siteConfig.business.address.city},{' '}
+                  {siteConfig.business.address.state} {siteConfig.business.address.zip}
+                </p>
               </div>
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs text-slate-500">Demonstration Location</p>
-                  <p className="text-slate-200">
-                    {siteConfig.business.address.street}, {siteConfig.business.address.city},{' '}
-                    {siteConfig.business.address.state} {siteConfig.business.address.zip}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <Clock className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs text-slate-500">Operating Hours</p>
-                  <p className="text-xs text-slate-300">{siteConfig.business.hours.regular}</p>
-                </div>
+
+              <div>
+                <div className="text-[11px] font-mono text-stone-400">OPERATING HOURS</div>
+                <p className="text-xs text-stone-400">
+                  {siteConfig.business.hours.regular}
+                  <br />
+                  <span className="text-stone-300">{siteConfig.business.hours.emergency}</span>
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Demonstration Disclaimer & Copyright */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>
-              Demonstration Template: Replace business details in{' '}
-              <code className="text-slate-300 font-mono">src/config/siteConfig.ts</code> prior to production deployment.
+        {/* Bottom Utility Bar */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-400 font-mono">
+          <p>© {new Date().getFullYear()} {siteConfig.business.name}. All rights reserved.</p>
+
+          <div className="flex items-center gap-6">
+            <button
+              onClick={() => handleNav('/privacy/')}
+              className="hover:text-stone-200 transition-colors cursor-pointer"
+            >
+              Privacy Policy
+            </button>
+            <span>•</span>
+            <span className="text-stone-400">
+              Demonstration Template — Configure details in <code className="text-stone-300">siteConfig.ts</code>
             </span>
           </div>
-          <p>© {new Date().getFullYear()} Premium HVAC Demonstration. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -1,0 +1,64 @@
+{
+  "entities": {
+    "ServiceRequest": {
+      "title": "ServiceRequest",
+      "description": "Homeowner service enquiry or quote request",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "phone": { "type": "string", "minLength": 7, "maxLength": 25 },
+        "email": { "type": "string", "minLength": 5, "maxLength": 100 },
+        "zipCode": { "type": "string", "minLength": 5, "maxLength": 10 },
+        "serviceType": { "type": "string", "maxLength": 50 },
+        "message": { "type": "string", "maxLength": 1000 },
+        "urgency": { "type": "string", "maxLength": 30 },
+        "preferredTime": { "type": "string", "maxLength": 50 },
+        "status": { "type": "string", "maxLength": 20 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["name", "phone", "zipCode", "serviceType", "status"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Verified homeowner feedback and ratings",
+      "type": "object",
+      "properties": {
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "city": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "rating": { "type": "integer" },
+        "service": { "type": "string", "maxLength": 60 },
+        "reviewText": { "type": "string", "minLength": 10, "maxLength": 1000 },
+        "verified": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["customerName", "city", "rating", "reviewText"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Registered homeowner customer profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 100 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    }
+  },
+  "firestore": {
+    "/serviceRequests/{requestId}": {
+      "schema": "ServiceRequest",
+      "description": "Collection of incoming service requests and quote leads"
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Customer testimonials and ratings"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profiles for authenticated homeowners and technicians"
+    }
+  }
+}

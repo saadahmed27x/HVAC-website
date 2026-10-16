@@ -1,0 +1,6 @@
+{
+  "name": "Premium HVAC – Florida Residential Heating & Cooling",
+  "description": "Professional residential HVAC contractor website for Central Florida. Emergency AC repair, precision installation, high-efficiency heat pumps, and preventative maintenance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

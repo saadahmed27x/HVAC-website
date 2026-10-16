@@ -1,0 +1,9 @@
+# Premium HVAC - Demonstration Mode Robots Configuration
+# In demo mode, all crawlers are restricted to prevent indexing unverified local business claims.
+# To enable production indexing: remove Disallow, add Allow: /, and configure your production Sitemap URL.
+
+User-agent: *
+Disallow: /
+
+# Production Sitemap location (uncomment when deploying live):
+# Sitemap: https://your-production-domain.com/sitemap.xml
